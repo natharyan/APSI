@@ -1,5 +1,5 @@
 #include "kzg.hpp"
-#include "util.hpp"
+#include "../utils/util.hpp"
 #include "polynomial.hpp" 
 
 //generates trusted setup for kzg commitments
