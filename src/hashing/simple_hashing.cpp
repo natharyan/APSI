@@ -3,7 +3,6 @@
 #include <iostream>
 
 using namespace std;
-// comment 
 
 uint32_t hs_t::hash(const Element& elem, uint32_t nbins, int which) const {
     uint64_t seed = (which == 0) ? seed1 : (which == 1) ? seed2 : seed3;

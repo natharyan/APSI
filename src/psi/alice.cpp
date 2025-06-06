@@ -67,7 +67,26 @@ int main() {
         M1[pairing_res] = binPermutation(pos, nbins, max_j);
     }
 
-    // TODO: send m_g_2, M1 to Bob.
+    //  sending m_g_2, M1 to Bob.
+    ofstream outfile("output/alice_data.txt");
+    if (!outfile.is_open()) {
+        cerr << "Failed to open output file!" << endl;
+        return 1;
+    }
+
+    stringstream ss_g2;
+    m_g_2.save(ss_g2, mcl::IoSerialize);
+    outfile << "m_g_2: " << ss_g2.str() << endl;
+
+    outfile << "M1:" << endl;
+    for (const auto& [pair_val, pos] : M1) {
+        stringstream ss_fp12;
+        pair_val.save(ss_fp12, mcl::IoSerialize);
+        outfile << ss_fp12.str() << " " << pos.bin_index << " " << pos.bin_offset << endl;
+    }
+
+    outfile.close();
+    cout << "Saved m_g_2 and M1 to output/alice_data.txt" << endl;
 
     return 0;
 }

@@ -5,6 +5,7 @@
 #include <vector>
 #include <string>
 #include <sstream>
+#include <fstream>
 
 using namespace std;
 
@@ -47,6 +48,44 @@ int main() {
     vector<BinPosition> V;
     // TODO: add retrieval of M1 and m_g_2 from Alice
     unordered_map<mcl::Fp12, BinPosition> M1; // TODO: change
+    mcl::bn::G2 m_g_2;
+
+    ifstream infile("output/alice_data.txt");
+    if (!infile.is_open()) {
+        cerr << "Failed to open Alice's data file!" << endl;
+        return 1;
+    }
+
+    string line;
+    getline(infile, line);
+    if (line.rfind("m_g_2: ", 0) == 0) {
+        string g2_str = line.substr(8);
+        m_g_2.setStr(g2_str, 10);
+    } else {
+        cerr << "Invalid file format: m_g_2 not found" << endl;
+        return 1;
+    }
+
+    // Read the M1 header
+    getline(infile, line);
+    if (line != "M1:") {
+        cerr << "Invalid file format: M1 header not found" << endl;
+        return 1;
+    }
+
+    // Read all entries of M1
+    while (getline(infile, line)) {
+        stringstream ss(line);
+        string fp12_str;
+        uint32_t bin_index, bin_offset;
+        ss >> fp12_str >> bin_index >> bin_offset;
+
+        mcl::Fp12 val;
+        val.setStr(fp12_str, 10);
+        M1[val] = BinPosition(bin_index, bin_offset);
+    }
+    infile.close();
+
     unordered_map<mcl::Fp12, BinPosition> M2;
     mcl::bn::G2 m_g_2;
     for (const auto& dict_elem : G2) {
