@@ -65,6 +65,7 @@
         "stack": "cpp",
         "streambuf": "cpp",
         "variant": "cpp",
-        "fstream": "cpp"
+        "fstream": "cpp",
+        "iomanip": "cpp"
     }
 }
